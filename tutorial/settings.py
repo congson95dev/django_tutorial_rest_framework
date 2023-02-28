@@ -137,7 +137,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# For 'COERCE_DECIMAL_TO_STRING': False,
+# this is a custom setting,
+# the purpose is to set decimal as a number,
+# because by default, django rest framework return decimal field as a string
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'COERCE_DECIMAL_TO_STRING': False,
 }
