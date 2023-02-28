@@ -37,3 +37,21 @@
 ### Now, you are good to go
 ### Other information i've comment in the code
 ### Try to read it to know how to use this api project
+
+----------
+
+# Notes:
+
+### This project use main module which is "snippets"
+
+### But also this project use "store" module, which copied from https://github.com/saxsax1995/django_tutorial
+### I just copy migrations and models, and delete everything else in "store" module
+
+### If you got error when install by using this command:
+`python3 manage.py migrate`
+
+### Please try to run 1 by 1.
+### You can move the migration file to somewhere else, then run 1 by 1 to make sure no error orcur
+
+### Also, because in the https://github.com/saxsax1995/django_tutorial, i use sqlite db, 
+### but in this rest framework tutorial, so i'll need to change a little bit in the models and migrations

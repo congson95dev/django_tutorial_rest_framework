@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48fe8f86-a901-4d1f-a09f-c6d2cf5aee5e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tutorial/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/tutorial/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,24 +29,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/ncson1/project/django/django_tutorial_rest_framework",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/ncson1/project/django/django_tutorial_rest_framework&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="django_tutorial_rest_framework" type="Python.DjangoServer" factoryName="Django server">
       <module name="django_tutorial_rest_framework" />
@@ -51,20 +56,29 @@
         <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="tutorial.settings" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" />
+        </ENTRIES>
+      </EXTENSION>
       <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
       <option name="host" value="" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
       <option name="runTestServer" value="false" />
       <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="false" />
-      <option name="customRunCommand" value="" />
+      <option name="useCustomRunCommand" value="true" />
+      <option name="customRunCommand" value="migrate" />
       <method v="2" />
     </configuration>
   </component>
@@ -84,7 +98,10 @@
       <workItem from="1676363870357" duration="4190000" />
       <workItem from="1676512873605" duration="10525000" />
       <workItem from="1676857424842" duration="53000" />
-      <workItem from="1676857483278" duration="13370000" />
+      <workItem from="1676857483278" duration="14947000" />
+      <workItem from="1676943082628" duration="1283000" />
+      <workItem from="1677032054747" duration="15000" />
+      <workItem from="1677549659376" duration="4692000" />
     </task>
     <servers />
   </component>
