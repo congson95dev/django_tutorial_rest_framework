@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48fe8f86-a901-4d1f-a09f-c6d2cf5aee5e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tutorial/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/tutorial/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -19,6 +15,31 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="store" />
+                    <option name="lastUsedInstant" value="1677554400" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1677554399" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -72,13 +93,14 @@
         </ENTRIES>
       </EXTENSION>
       <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
       <option name="host" value="" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
       <option name="runTestServer" value="false" />
       <option name="runNoReload" value="false" />
-      <option name="useCustomRunCommand" value="true" />
-      <option name="customRunCommand" value="migrate" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
   </component>
@@ -101,7 +123,7 @@
       <workItem from="1676857483278" duration="14947000" />
       <workItem from="1676943082628" duration="1283000" />
       <workItem from="1677032054747" duration="15000" />
-      <workItem from="1677549659376" duration="4692000" />
+      <workItem from="1677549659376" duration="8743000" />
     </task>
     <servers />
   </component>
