@@ -40,7 +40,7 @@ def api_root(request, format=None):
 # This way is the shortest way
 # It combine "list" and "detail" in the 2nd way as one and call it "viewset".
 class SnippetViewSet(viewsets.ModelViewSet):
-    queryset = Snippet.objects.all()
+    queryset = Snippet.objects.select_related('category').all()
     serializer_class = SnippetSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
