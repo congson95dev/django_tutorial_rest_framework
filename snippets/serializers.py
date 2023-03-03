@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from rest_framework import serializers
-from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, SnippetCategory
+from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, SnippetCategory, SnippetTag
 from django.contrib.auth.models import User
 
 # # long way to do serializer by using serializers.Serializer
@@ -89,13 +89,42 @@ class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
         fields = ['id', 'title', 'code', 'decimal_field', 'renamed_decimal_field', 'custom_decimal_field',
-                  'linenos', 'language', 'style', 'owner', 'category']
+                  'linenos', 'language', 'style', 'owner', 'category', 'tag_count']
+
+    tag_count = serializers.IntegerField(read_only=True)
 
     # we can do the same as what we do with the field in the previous section, which is serializers.Serializer
     # such as category, renamed_decimal_field, custom_decimal_field
+
+    # when we call to StringRelatedField() of a relationship table like this,
+    # it will trigger __str__() of that table "category" in file models.py
+    # and in the __str__() function, it called to self.title, which is category.title
+    # and it gonna call a tons of query if we don't set select_related()
+    # so to avoid this, we need to set select_related('category') in queryset inside file views.py
+    category = serializers.StringRelatedField()
+
+    # get category data as a nested dictionary inside the main response
+    # Ex:
+    # {
+    #     "id": 1,
+    #     "title": "",
+    #     ...
+    #     "category": {
+    #         "id": 1,
+    #         "title": "cat 1"
+    #     },
+    #     ...
+    # }
     category = SnippetCategorySerializer(required=False)
+
+    # renamed field
+    # to rename a field, we need to set "source" for it, such as "source='decimal_field'",
+    # or else, it will not appear or it will throw an error
     renamed_decimal_field = serializers.DecimalField(max_digits=6, decimal_places=2,
                                                          required=False, source='decimal_field')
+
+    # custom field by using function
+    # we need to define a function and transfer it to "method_name"
     custom_decimal_field = serializers.SerializerMethodField(method_name='calculate_custom_decimal_field')
 
     # function used to set data for "custom_decimal_field"
@@ -132,3 +161,27 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'snippets']
+
+
+# serializers for SnippetTag
+class SnippetTagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SnippetTag
+        fields = ['id', 'title', 'snippet']
+
+    # set to read_only mode
+    snippet = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    # set snippet_id to table snippet_tags when create new record
+    # Ex we have this url: /snippets/2/snippet_tags/
+    # this url is following by format: /snippets/<snippet_pk>/snippet_tags/
+    # we will get the "snippet_pk" params by url and save it to db
+
+    # for the get "snippet_pk" params by url and transfer it to context, we've already done it in snippets/views.py
+    # in function get_serializer_context()
+    def create(self, validated_data):
+        # get data from context
+        snippet_id = self.context['snippet_id']
+        # save to db
+        return SnippetTag.objects.create(snippet_id=snippet_id, **validated_data)

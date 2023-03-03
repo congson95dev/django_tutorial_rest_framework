@@ -5,7 +5,9 @@ charset-normalizer==3.0.1
 defusedxml==0.7.1
 Django==4.1.6
 django-debug-toolbar==3.8.1
+django-filter==22.1
 djangorestframework==3.14.0
+drf-nested-routers==0.93.4
 httpie==3.2.1
 idna==3.4
 markdown-it-py==2.1.0

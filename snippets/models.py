@@ -30,3 +30,8 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ['created']
+
+
+class SnippetTag(models.Model):
+    title = models.CharField(max_length=255)
+    snippet = models.ForeignKey(Snippet, related_name='snippet_tags', on_delete=models.CASCADE)

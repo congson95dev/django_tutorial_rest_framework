@@ -7,14 +7,13 @@
     <list default="true" id="48fe8f86-a901-4d1f-a09f-c6d2cf5aee5e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a10aaa8d-2ddd-4ef6-be0e-57d38dfcdf33.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a10aaa8d-2ddd-4ef6-be0e-57d38dfcdf33.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/snippets/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/snippets/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snippets/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/snippets/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tutorial/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/tutorial/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/tutorial/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +93,9 @@
       <workItem from="1676512873605" duration="10525000" />
       <workItem from="1676857424842" duration="53000" />
       <workItem from="1676857483278" duration="13370000" />
-      <workItem from="1677637407267" duration="5926000" />
+      <workItem from="1677637407267" duration="13319000" />
+      <workItem from="1677724028753" duration="6967000" />
+      <workItem from="1677807004300" duration="9155000" />
     </task>
     <servers />
   </component>
