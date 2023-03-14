@@ -1,4 +1,5 @@
 from django.core.validators import MinValueValidator
+from django.contrib.auth import get_user_model
 from django.db import models
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
@@ -23,9 +24,16 @@ class Snippet(models.Model):
     linenos = models.BooleanField(default=False)
     language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
     style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
+
     # set current user as "owner"
     # this field is like "created_by" in other project
-    owner = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE, null=True)
+
+    # because we custom the user model in auth_custom module
+    # so we need to call get_user_model() to get the new user model
+    owner = models.ForeignKey(get_user_model(), related_name='snippets', on_delete=models.CASCADE, null=True)
+    # normally, we just need to call 'auth.User' as below
+    # owner = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE, null=True)
+
     category = models.ForeignKey(SnippetCategory, related_name='snippets', on_delete=models.CASCADE,
                                  null=True, blank=True)
 

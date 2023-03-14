@@ -158,3 +158,7 @@ REST_FRAMEWORK = {
 INTERNAL_IPS = [
    '127.0.0.1',
 ]
+
+# because we custom the user model in auth_custom module
+# so we need to setup AUTH_USER_MODEL, this field will be called in django.contrib.auth.get_user_model()
+AUTH_USER_MODEL = 'auth_custom.User'

@@ -37,3 +37,15 @@
 ### Now, you are good to go
 ### Other information i've comment in the code
 ### Try to read it to know how to use this api project
+
+# Notes:
+
+### Whenever we create new project for django, we need to override the user model first, even if we gonna use it or not
+
+### Or else, when we override it later when the project already run, it gonna cause an error:
+
+### `admin.0001_initial is applied before its dependency app.0001_initial on database 'default'`
+
+### To solve this error, we must drop the database, and that's not good, so we need to prevent that situation
+
+### Please check module "auth_custom" for more information

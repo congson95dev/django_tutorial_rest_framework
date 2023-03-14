@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models import Count, F, Sum, ExpressionWrapper, Value
 from django.forms import DecimalField
 from django.http import HttpResponse, JsonResponse, QueryDict
@@ -352,7 +353,13 @@ class SnippetViewSet(viewsets.ModelViewSet):
 # 1st way:
 # use viewsets
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    # because we custom the user model in auth_custom module
+    # so we need to call get_user_model() to get the new user model
+    user = get_user_model()
+    queryset = user.objects.all()
+    # normally, we just need to call User.objects.all() as below
+    # queryset = User.objects.all()
+
     serializer_class = UserSerializer
 
 
