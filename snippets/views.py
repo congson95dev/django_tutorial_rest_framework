@@ -1,20 +1,26 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, F, Sum, ExpressionWrapper, Value
+from django.forms import DecimalField
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, mixins, generics, permissions, renderers, viewsets
 from rest_framework.decorators import api_view
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from snippets.filters import SnippetFilter
-from snippets.models import Snippet, SnippetTag
+from snippets.models import Snippet, SnippetTag, Cart, CartItem
+from snippets.pagination import CustomPagination
 from snippets.permissions import IsOwnerOrReadOnly
-from snippets.serializers import SnippetSerializer, UserSerializer, SnippetTagSerializer
+from snippets.serializers import SnippetSerializer, UserSerializer, SnippetTagSerializer, CartSerializer, \
+    CartItemSerializer, CartItemCRDSerializer, UpdateCartItemSerializer
 
 
 # override the home page list api
@@ -66,7 +72,7 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
     # to use custom filter, we need 2 step:
     # step 1: set DjangoFilterBackend to filter_backends
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
     # step 2:
     # call to SnippetFilter in file snippets/filters.py
@@ -79,6 +85,26 @@ class SnippetViewSet(viewsets.ModelViewSet):
     # step 2:
     # set fields to search feature
     search_fields = ['title', 'code', 'category__title']
+    # we can check this by open swagger and go to /snippets
+    # then click to button "filter" and try to filter
+    # url will be like this: snippets/?search=cat+2+zoo
+
+    # ordering feature:
+    # we need 2 step to setup this ordering feature
+    # step 1:
+    # set OrderingFilter to filter_backends, we've already done that in above code
+    # step 2:
+    # set fields to ordering feature
+    ordering_fields = ['unit_price', 'created']
+    # we can check this by open swagger and go to /snippets
+    # then click to button "filter" and try to filter
+    # url will be like this: snippets/?ordering=-unit_price,-created
+
+    # custom pagination feature:
+    # we can simply set pagination in tutorial/settings.py
+    # but in some case, we will need to custom pagination for each url separately
+    # such as in snippets list, the page_size = 10, but in snippet category list, the page_size = 15
+    pagination_class = CustomPagination
 
     # we can set "queryset" by using get_queryset() function too
     # this is used when you have complicated queryset for multiple cases
@@ -359,3 +385,51 @@ class SnippetTagViewSet(viewsets.ModelViewSet):
     # so we can use that later
     def get_serializer_context(self):
         return {'snippet_id': self.kwargs['snippet_pk']}
+
+
+class CartViewSet(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.DestroyModelMixin,
+                  GenericViewSet):
+
+    serializer_class = CartSerializer
+
+    def get_queryset(self):
+        # get unit_price and quantity
+        cart_items = CartItem.objects.select_related('snippet')\
+            .filter(cart_id=self.kwargs['pk'])\
+            .values('snippet__unit_price', 'quantity')
+
+        # calculate total_price
+        # total_price = 0
+        # for cart_item in cart_items:
+        #     total_price += cart_item.get('snippet__unit_price') * cart_item.get('quantity')
+
+        # shorter way to calculate total_price
+        total_price = sum([
+            cart_item.get('quantity') * cart_item.get('snippet__unit_price')
+            for cart_item in cart_items
+        ])
+
+        # or we can calculate total_price by serializer for even shorter
+
+        return Cart.objects\
+            .prefetch_related('items__snippet')\
+            .annotate(total_price=Value(total_price))\
+            .all()
+
+
+class CartItemViewSet(viewsets.ModelViewSet):
+    def get_serializer_class(self):
+        # we use 2 difference serializer for PUT and other method such as POST, GET
+        if self.request.method == 'PUT':
+            return UpdateCartItemSerializer
+        return CartItemCRDSerializer
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart_id=self.kwargs['cart_pk']) 
+
+    # set data to context in serializer
+    # so we can use that later
+    def get_serializer_context(self):
+        return {'cart_id': self.kwargs['cart_pk']}

@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from rest_framework import serializers
-from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, SnippetCategory, SnippetTag
+from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, SnippetCategory, SnippetTag, Cart, CartItem
 from django.contrib.auth.models import User
 
 # # long way to do serializer by using serializers.Serializer
@@ -43,19 +43,19 @@ from django.contrib.auth.models import User
 #     category = SnippetCategorySerializer()
 #
 #     # original field
-#     decimal_field = serializers.DecimalField(max_digits=6, decimal_places=2, required=False)
+#     unit_price = serializers.DecimalField(max_digits=6, decimal_places=2, required=False)
 #     # renamed field
-#     # to rename a field, we need to set "source" for it, such as "source='decimal_field'",
+#     # to rename a field, we need to set "source" for it, such as "source='unit_price'",
 #     # or else, it will not appear or it will throw an error
-#     renamed_decimal_field = serializers.DecimalField(max_digits=6, decimal_places=2,
-#                                                      required=False, source='decimal_field')
+#     renamed_unit_price = serializers.DecimalField(max_digits=6, decimal_places=2,
+#                                                      required=False, source='unit_price')
 #     # custom field by using function
 #     # we need to define a function and transfer it to "method_name"
-#     custom_decimal_field = serializers.SerializerMethodField(method_name='calculate_custom_decimal_field')
+#     custom_unit_price = serializers.SerializerMethodField(method_name='calculate_custom_unit_price')
 #
-#     # function used to set data for "custom_decimal_field"
-#     def calculate_custom_decimal_field(self, snippet: Snippet):
-#         return snippet.decimal_field * Decimal(2.0)
+#     # function used to set data for "custom_unit_price"
+#     def calculate_custom_unit_price(self, snippet: Snippet):
+#         return snippet.unit_price * Decimal(2.0)
 #
 #     def create(self, validated_data):
 #         """
@@ -69,7 +69,7 @@ from django.contrib.auth.models import User
 #         """
 #         instance.title = validated_data.get('title', instance.title)
 #         instance.code = validated_data.get('code', instance.code)
-#         instance.decimal_field = validated_data.get('decimal_field', instance.decimal_field)
+#         instance.unit_price = validated_data.get('unit_price', instance.unit_price)
 #         instance.linenos = validated_data.get('linenos', instance.linenos)
 #         instance.language = validated_data.get('language', instance.language)
 #         instance.style = validated_data.get('style', instance.style)
@@ -88,13 +88,13 @@ class SnippetCategorySerializer(serializers.ModelSerializer):
 class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
-        fields = ['id', 'title', 'code', 'decimal_field', 'renamed_decimal_field', 'custom_decimal_field',
+        fields = ['id', 'title', 'code', 'unit_price', 'renamed_unit_price', 'custom_unit_price',
                   'linenos', 'language', 'style', 'owner', 'category', 'tag_count']
 
     tag_count = serializers.IntegerField(read_only=True)
 
     # we can do the same as what we do with the field in the previous section, which is serializers.Serializer
-    # such as category, renamed_decimal_field, custom_decimal_field
+    # such as category, renamed_unit_price, custom_unit_price
 
     # when we call to StringRelatedField() of a relationship table like this,
     # it will trigger __str__() of that table "category" in file models.py
@@ -118,18 +118,18 @@ class SnippetSerializer(serializers.ModelSerializer):
     category = SnippetCategorySerializer(required=False)
 
     # renamed field
-    # to rename a field, we need to set "source" for it, such as "source='decimal_field'",
+    # to rename a field, we need to set "source" for it, such as "source='unit_price'",
     # or else, it will not appear or it will throw an error
-    renamed_decimal_field = serializers.DecimalField(max_digits=6, decimal_places=2,
-                                                         required=False, source='decimal_field')
+    renamed_unit_price = serializers.DecimalField(max_digits=6, decimal_places=2,
+                                                         required=False, source='unit_price')
 
     # custom field by using function
     # we need to define a function and transfer it to "method_name"
-    custom_decimal_field = serializers.SerializerMethodField(method_name='calculate_custom_decimal_field')
+    custom_unit_price = serializers.SerializerMethodField(method_name='calculate_custom_unit_price')
 
-    # function used to set data for "custom_decimal_field"
-    def calculate_custom_decimal_field(self, snippet: Snippet):
-        return Decimal(snippet.decimal_field) * Decimal(2.0)
+    # function used to set data for "custom_unit_price"
+    def calculate_custom_unit_price(self, snippet: Snippet):
+        return Decimal(snippet.unit_price) * Decimal(2.0)
 
     # Example of custom validator
     # def validate(self, data):
@@ -185,3 +185,88 @@ class SnippetTagSerializer(serializers.ModelSerializer):
         snippet_id = self.context['snippet_id']
         # save to db
         return SnippetTag.objects.create(snippet_id=snippet_id, **validated_data)
+
+
+class CartItemSnippetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Snippet
+        fields = ['id', 'title', 'code', 'unit_price']
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    # IMPORTANT: need to set this before call it in the "fields"
+    snippet = CartItemSnippetSerializer()
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'snippet', 'quantity', 'total_price']
+
+    total_price = serializers.SerializerMethodField(method_name='calculate_total_price')
+
+    # calculate total_price
+    def calculate_total_price(self, item: CartItem):
+        return item.snippet.unit_price * item.quantity
+
+
+# serializers for Cart
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = ['id', 'items', 'created_date', 'total_price']
+
+    # set to read_only mode
+    created_date = serializers.DateTimeField(read_only=True)
+
+    # set many=True to get multiple items
+    # because 1 cart have multiple cart items
+    items = CartItemSerializer(many=True, read_only=True)
+
+    # render total_price get from views.py
+    # total_price = serializers.DecimalField(max_digits=6, decimal_places=2, read_only=True)
+
+    total_price = serializers.SerializerMethodField(method_name='calculate_total_price')
+
+    def calculate_total_price(self, cart: Cart):
+        return sum([item.quantity * item.snippet.unit_price for item in cart.items.all()])
+
+
+# serializers for CartItem
+class CartItemCRDSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'cart', 'snippet', 'quantity']
+
+    # set to read_only mode
+    cart = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    def create(self, validated_data):
+        # get data from context
+        snippet_id = self.validated_data['snippet']
+        quantity = self.validated_data['quantity']
+        cart_id = self.context['cart_id']
+
+        # save to db
+        try:
+            # if already exists in db, update cart_item.quanity += quantity
+            cart_item = CartItem.objects.get(cart_id=cart_id, snippet_id=snippet_id)
+            cart_item.quantity += quantity
+            cart_item.save()
+            instance = cart_item
+        except CartItem.DoesNotExist:
+            # if not exists, create new
+            instance = CartItem.objects.create(cart_id=cart_id, **validated_data)
+
+        return instance
+
+
+class UpdateCartItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'cart', 'snippet', 'quantity']
+
+    # set to read_only mode
+    id = serializers.IntegerField(read_only=True)
+    cart = serializers.PrimaryKeyRelatedField(read_only=True)
+    snippet = serializers.PrimaryKeyRelatedField(read_only=True)

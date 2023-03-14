@@ -12,5 +12,5 @@ class SnippetFilter(FilterSet):
         model = Snippet
         fields = {
             'category_id': ['exact'],
-            'decimal_field': ['lt', 'gt'],
+            'unit_price': ['lt', 'gt'],
         }

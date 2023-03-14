@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48fe8f86-a901-4d1f-a09f-c6d2cf5aee5e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3b27bfc8-db6e-460e-936d-1cff5ad4ef5f/storage_v2/_src_/database/django_tutorial_rest_framework.cGlUuw/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snippets/filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/filters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/snippets/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/snippets/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/snippets/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/snippets/urls.py" afterDir="false" />
@@ -95,7 +96,10 @@
       <workItem from="1676857483278" duration="13370000" />
       <workItem from="1677637407267" duration="13319000" />
       <workItem from="1677724028753" duration="6967000" />
-      <workItem from="1677807004300" duration="9155000" />
+      <workItem from="1677807004300" duration="13410000" />
+      <workItem from="1678153160408" duration="15161000" />
+      <workItem from="1678680662162" duration="6961000" />
+      <workItem from="1678761565409" duration="1473000" />
     </task>
     <servers />
   </component>

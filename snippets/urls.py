@@ -102,6 +102,7 @@ from snippets.views import SnippetViewSet, UserViewSet
 router = routers.DefaultRouter()
 router.register('snippets', views.SnippetViewSet, basename='snippets')
 router.register('users', views.UserViewSet, basename='users')
+router.register('carts', views.CartViewSet, basename='carts')
 
 # Register nested router
 # this one will render url like:
@@ -111,6 +112,9 @@ router.register('users', views.UserViewSet, basename='users')
 snippets_router = routers.NestedSimpleRouter(router, 'snippets', lookup='snippet')
 snippets_router.register(r'snippet_tags', views.SnippetTagViewSet, basename='snippet_tags')
 
+carts_router = routers.NestedSimpleRouter(router, 'carts', lookup='cart')
+carts_router.register(r'items', views.CartItemViewSet, basename='items')
+
 # Step 2:
 # To add all the routers to urlpatterns, we just need to plus them together
-urlpatterns = router.urls + snippets_router.urls
+urlpatterns = router.urls + snippets_router.urls + carts_router.urls

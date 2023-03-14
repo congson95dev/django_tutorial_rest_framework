@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_filters',
     'snippets',
+    'auth_custom'
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # this is a custom setting,
 # the purpose is to set decimal as a number,
 # because by default, django rest framework return decimal field as a string
+
+# Pagination:
+# set DEFAULT_PAGINATION_CLASS and PAGE_SIZE
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
