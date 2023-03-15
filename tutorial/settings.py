@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -27,7 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'djoser',
     'debug_toolbar',
     'django_filters',
     'snippets',
@@ -75,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tutorial.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -99,7 +97,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -118,7 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -129,7 +125,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -149,16 +144,38 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Pagination:
 # set DEFAULT_PAGINATION_CLASS and PAGE_SIZE
 
+# For DEFAULT_AUTHENTICATION_CLASSES
+# setup jwt for djoser
+# https://djoser.readthedocs.io/en/latest/authentication_backends.html#json-web-token-authentication
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# setup jwt by djoser
+# https://djoser.readthedocs.io/en/latest/authentication_backends.html#json-web-token-authentication
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=360),
 }
 
 INTERNAL_IPS = [
-   '127.0.0.1',
+    '127.0.0.1',
 ]
 
 # because we custom the user model in auth_custom module
 # so we need to setup AUTH_USER_MODEL, this field will be called in django.contrib.auth.get_user_model()
 AUTH_USER_MODEL = 'auth_custom.User'
+
+# custom serializer for user_create action of djoser
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'auth_custom.serializers.UserCreateSerializer',
+        'current_user': 'auth_custom.serializers.UserSerializer',
+    }
+}

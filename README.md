@@ -38,6 +38,8 @@
 ### Other information i've comment in the code
 ### Try to read it to know how to use this api project
 
+### ----------------------------------------------------------------------------------------------
+
 # Notes:
 
 ### Whenever we create new project for django, we need to override the user model first, even if we gonna use it or not
@@ -49,3 +51,11 @@
 ### To solve this error, we must drop the database, and that's not good, so we need to prevent that situation
 
 ### Please check module "auth_custom" for more information
+
+### ----------------------------------------------------------------------------------------------
+
+### For authenticate, we use jwt of "djoser"
+
+### Setup by 2 steps:
+### https://djoser.readthedocs.io/en/latest/getting_started.html
+### https://djoser.readthedocs.io/en/latest/authentication_backends.html#json-web-token-authentication

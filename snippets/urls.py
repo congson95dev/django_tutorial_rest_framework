@@ -12,6 +12,7 @@ from rest_framework_nested import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from snippets import views
+from auth_custom import views as auth_custom_views
 from snippets.views import SnippetViewSet, UserViewSet
 
 # There are 4 ways to call urlpatterns, each way serve to difference purpose.
@@ -103,6 +104,7 @@ router = routers.DefaultRouter()
 router.register('snippets', views.SnippetViewSet, basename='snippets')
 router.register('users', views.UserViewSet, basename='users')
 router.register('carts', views.CartViewSet, basename='carts')
+router.register('user_profile', auth_custom_views.UserProfileViewSet, basename='user_profile')
 
 # Register nested router
 # this one will render url like:
