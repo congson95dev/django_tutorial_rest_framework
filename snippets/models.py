@@ -4,9 +4,21 @@ from django.db import models
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 
+from auth_custom.models import MEMBERSHIP, MEMBERSHIP_BRONZE
+
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
+
+PAYMENT_STATUS_PENDING = 'P'
+PAYMENT_STATUS_COMPLETE = 'C'
+PAYMENT_STATUS_FAILED = 'F'
+
+PAYMENT_STATUS = [
+    (PAYMENT_STATUS_PENDING, 'Pending'),
+    (PAYMENT_STATUS_COMPLETE, 'Complete'),
+    (PAYMENT_STATUS_FAILED, 'Failed')
+]
 
 
 class SnippetCategory(models.Model):
@@ -66,3 +78,25 @@ class CartItem(models.Model):
     # THIS DOESN'T WORK YET
     # class Meta:
     #     unique_together = [['cart'], ['snippet']]
+
+
+class Customer(models.Model):
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone = models.IntegerField()
+    birth_date = models.DateField(null=True)
+    membership = models.CharField(max_length=1, choices=MEMBERSHIP, default=MEMBERSHIP_BRONZE)
+
+
+class Order(models.Model):
+    placed_at = models.DateTimeField(auto_now_add=True)
+    payment_status = models.CharField(max_length=1, choices=PAYMENT_STATUS)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name='items')
+    snippet = models.ForeignKey(Snippet, on_delete=models.PROTECT)
+    quantity = models.PositiveSmallIntegerField()
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)

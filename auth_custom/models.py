@@ -20,6 +20,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
 
 
+# external information for default "user" table of django
 class UserProfile(models.Model):
     phone = models.IntegerField(null=True)
     birth_date = models.DateField(null=True)

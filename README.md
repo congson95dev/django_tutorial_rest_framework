@@ -42,7 +42,7 @@
 
 # Notes:
 
-### Whenever we create new project for django, we need to override the user model first, even if we gonna use it or not
+### Whenever we create new project for django, we need to override the "user" model first, even if we gonna use it or not
 
 ### Or else, when we override it later when the project already run, it gonna cause an error:
 
@@ -59,3 +59,17 @@
 ### Setup by 2 steps:
 ### https://djoser.readthedocs.io/en/latest/getting_started.html
 ### https://djoser.readthedocs.io/en/latest/authentication_backends.html#json-web-token-authentication
+
+### After that, we could use "permission" to check authenticate
+### You can check in file:
+### `snippets/views.py`
+
+### ----------------------------------------------------------------------------------------------
+
+### We can create serializer for a field which doesn't exist in the model
+### Please check:
+`snippets/serializers.py class CreateOrderSerializer()`
+
+### After that, we can override the response if we don't comfortable with that
+### Please check:
+`snippets/views.py OrderViewSet.create()`

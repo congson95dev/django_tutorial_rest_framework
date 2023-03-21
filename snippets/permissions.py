@@ -16,3 +16,13 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the owner of the snippet.
         return obj.owner == request.user
+
+
+# Allow only admin to create, update, delete records.
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # is_staff is considered admin in django
+        return bool(request.user and request.user.is_staff)

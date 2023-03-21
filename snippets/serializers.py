@@ -1,8 +1,14 @@
 from decimal import Decimal
 
+from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, SnippetCategory, SnippetTag, Cart, CartItem
+from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, SnippetCategory, SnippetTag, Cart, CartItem, \
+    Order, OrderItem, Customer
 from django.contrib.auth.models import User
+
+from snippets.signals import order_created
+
 
 # # long way to do serializer by using serializers.Serializer
 # class SnippetCategorySerializer(serializers.Serializer):
@@ -270,3 +276,76 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     cart = serializers.PrimaryKeyRelatedField(read_only=True)
     snippet = serializers.PrimaryKeyRelatedField(read_only=True)
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    # IMPORTANT: need to set this before call it in the "fields"
+    snippet = CartItemSnippetSerializer(read_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'quantity', 'unit_price', 'snippet']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = ['id', 'placed_at', 'payment_status', 'customer_id', 'items']
+
+    customer_id = serializers.IntegerField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
+    placed_at = serializers.DateTimeField(read_only=True)
+
+    # set many=True to get multiple items
+    # because 1 order have multiple order items
+    items = OrderItemSerializer(many=True, read_only=True)
+
+
+class CreateOrderSerializer(serializers.Serializer):
+    # Create serializer for a field which doesn't exist in the model
+    # Ex: cart_id doesn't exist in Order model
+    # Also, to do this, we must use serializers.Serializer instead of serializers.ModelSerializer
+    cart_id = serializers.IntegerField()
+    customer_id = serializers.IntegerField()
+
+    # validate if cart is exist and cart is not empty
+    # format: def validate_ + column name
+    def validate_cart_id(self, cart_id):
+        if not Cart.objects.filter(pk=cart_id).exists():
+            raise serializers.ValidationError('No cart was found')
+        if not CartItem.objects.filter(cart_id=cart_id).exists():
+            raise serializers.ValidationError('Cart is empty')
+        return cart_id
+
+    # we need to use "save" method, if we use "create" method,
+    # it gonna throw error about cart_id because cart_id doesn't exist in Order model
+    def save(self, **kwargs):
+        with transaction.atomic():
+            # create order
+            customer = get_object_or_404(Customer, pk=self.validated_data['customer_id'])
+            order = Order.objects.create(customer=customer)
+
+            # get cart items
+            cart_id = self.validated_data['cart_id']
+            cart_items = CartItem.objects.select_related('snippet').filter(cart_id=cart_id)
+
+            # loop to create order items based on cart items
+            order_items = [
+                OrderItem(
+                    order=order,
+                    snippet=cart_item.snippet,
+                    quantity=cart_item.quantity,
+                    unit_price=cart_item.snippet.unit_price
+                ) for cart_item in cart_items
+            ]
+            OrderItem.objects.bulk_create(order_items)
+
+            # delete cart after we create order
+            # Cart.objects.get(pk=cart_id).delete()
+
+            # register signal
+            # transfer 2 params: sender and **kwargs
+            order_created.send_robust(self.__class__, order=order)
+
+            return order

@@ -104,6 +104,7 @@ router = routers.DefaultRouter()
 router.register('snippets', views.SnippetViewSet, basename='snippets')
 router.register('users', views.UserViewSet, basename='users')
 router.register('carts', views.CartViewSet, basename='carts')
+router.register('orders', views.OrderViewSet, basename='orders')
 router.register('user_profile', auth_custom_views.UserProfileViewSet, basename='user_profile')
 
 # Register nested router

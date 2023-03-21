@@ -11,17 +11,18 @@ from rest_framework import status, mixins, generics, permissions, renderers, vie
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from snippets.filters import SnippetFilter
-from snippets.models import Snippet, SnippetTag, Cart, CartItem
+from snippets.models import Snippet, SnippetTag, Cart, CartItem, Order
 from snippets.pagination import CustomPagination
 from snippets.permissions import IsOwnerOrReadOnly
 from snippets.serializers import SnippetSerializer, UserSerializer, SnippetTagSerializer, CartSerializer, \
-    CartItemSerializer, CartItemCRDSerializer, UpdateCartItemSerializer
+    CartItemSerializer, CartItemCRDSerializer, UpdateCartItemSerializer, OrderSerializer, CreateOrderSerializer
 
 
 # override the home page list api
@@ -63,8 +64,17 @@ class SnippetViewSet(viewsets.ModelViewSet):
     # Ex:
     # lookup_field = 'id'
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+    # set permission, this is default feature of django
+    permission_classes = [IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
+
+    # set permission based on some condition
+    def get_permissions(self):
+        # if method == get, we will allow everyone
+        # else, we will require authenticate
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsAuthenticatedOrReadOnly()]
 
     # custom filter by using https://django-filter.readthedocs.io/en/stable/guide/usage.html
     # this library will help us lower the code for the filter
@@ -398,13 +408,12 @@ class CartViewSet(mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
                   mixins.DestroyModelMixin,
                   GenericViewSet):
-
     serializer_class = CartSerializer
 
     def get_queryset(self):
         # get unit_price and quantity
-        cart_items = CartItem.objects.select_related('snippet')\
-            .filter(cart_id=self.kwargs['pk'])\
+        cart_items = CartItem.objects.select_related('snippet') \
+            .filter(cart_id=self.kwargs['pk']) \
             .values('snippet__unit_price', 'quantity')
 
         # calculate total_price
@@ -420,9 +429,9 @@ class CartViewSet(mixins.CreateModelMixin,
 
         # or we can calculate total_price by serializer for even shorter
 
-        return Cart.objects\
-            .prefetch_related('items__snippet')\
-            .annotate(total_price=Value(total_price))\
+        return Cart.objects \
+            .prefetch_related('items__snippet') \
+            .annotate(total_price=Value(total_price)) \
             .all()
 
 
@@ -434,9 +443,33 @@ class CartItemViewSet(viewsets.ModelViewSet):
         return CartItemCRDSerializer
 
     def get_queryset(self):
-        return CartItem.objects.filter(cart_id=self.kwargs['cart_pk']) 
+        return CartItem.objects.filter(cart_id=self.kwargs['cart_pk'])
 
-    # set data to context in serializer
+        # set data to context in serializer
+
     # so we can use that later
     def get_serializer_context(self):
         return {'cart_id': self.kwargs['cart_pk']}
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.prefetch_related('items__snippet').all()
+
+    # because of after we run POST to create order, as default,
+    # it gonna return column as we define in CreateOrderSerializer, which is cart_id and customer_id
+    # and we don't want that to return as response
+    # so we can customize the response by override the create() function
+    def create(self, request, *args, **kwargs):
+        # define serializer and create order
+        serializer = CreateOrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        order = serializer.save()
+        # reset serializer, call another serializer as response
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
+
+    def get_serializer_class(self):
+        # we use 2 difference serializer for POST and other method such as PUT, GET
+        if self.request.method == 'POST':
+            return CreateOrderSerializer
+        return OrderSerializer
