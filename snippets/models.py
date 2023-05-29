@@ -53,6 +53,12 @@ class Snippet(models.Model):
         ordering = ['created']
 
 
+class SnippetImage(models.Model):
+    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE, related_name='images')
+    # to use this ImageField(), we need to run "pip install pillow"
+    image = models.ImageField(upload_to='snippet/images')
+
+
 class SnippetTag(models.Model):
     title = models.CharField(max_length=255)
     snippet = models.ForeignKey(Snippet, related_name='snippet_tags', on_delete=models.CASCADE)

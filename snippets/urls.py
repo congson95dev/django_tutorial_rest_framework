@@ -1,3 +1,4 @@
+from django.conf.urls.static import static
 from django.urls import path, include
 
 # we have 2 ways to use "routers"
@@ -14,6 +15,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from snippets import views
 from auth_custom import views as auth_custom_views
 from snippets.views import SnippetViewSet, UserViewSet
+from tutorial import settings
 
 # There are 4 ways to call urlpatterns, each way serve to difference purpose.
 # First way is used when snippets/views.py use "views"
@@ -121,3 +123,10 @@ carts_router.register(r'items', views.CartItemViewSet, basename='items')
 # Step 2:
 # To add all the routers to urlpatterns, we just need to plus them together
 urlpatterns = router.urls + snippets_router.urls + carts_router.urls
+
+# check if debug mode enabled (so it will ignore this if we are on production)
+if settings.DEBUG:
+    # set url for media
+    # with this, we can go to this url and see the image appear:
+    # http://127.0.0.1:8000/media/test.png
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -40,6 +40,17 @@
 
 ### ----------------------------------------------------------------------------------------------
 
+# Additional knowledge:
+
+## Signals:
+
+### signals is a feature of django (similar as observer in Magento2)
+### which can use to `write custom code before or after the main function is called`
+### it support `pre_save, post_save, pre_delete, post_delete`
+### you can read about it in `auth_custom/signals/handler.py`
+
+### ----------------------------------------------------------------------------------------------
+
 # Notes:
 
 ### Whenever we create new project for django, we need to override the "user" model first, even if we gonna use it or not
@@ -73,3 +84,5 @@
 ### After that, we can override the response if we don't comfortable with that
 ### Please check:
 `snippets/views.py OrderViewSet.create()`
+
+### ----------------------------------------------------------------------------------------------
